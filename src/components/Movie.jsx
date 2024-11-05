@@ -1,8 +1,12 @@
 import { useState } from "react";
 import { movies } from "../services/fakeMovieService";
+import Pagination from "./common/Pagination";
+import { paginate } from "../utils/paginate";
 
 const Movie = () => {
   const [allMovies, setAllMovies] = useState(movies);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 4;
 
   const deleteMovie = (id) => {
     setAllMovies((prevMovies) => {
@@ -10,22 +14,11 @@ const Movie = () => {
     });
   };
 
-  const displayMovies = allMovies.map((movie) => (
-    <tr key={movie._id}>
-      <td>{movie.title}</td>
-      <td>{movie.genre.genre}</td>
-      <td>{movie.numberInStock}</td>
-      <td>{movie.dailyRentalRate}</td>
-      <td>
-        <button
-          onClick={() => deleteMovie(movie._id)}
-          className="btn btn-sm btn-danger"
-        >
-          Delete
-        </button>
-      </td>
-    </tr>
-  ));
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedMovies = paginate(allMovies, currentPage, pageSize);
 
   let message;
   if (allMovies.length === 1) message = "Showing 1 movie in the database";
@@ -35,9 +28,9 @@ const Movie = () => {
 
   return (
     <>
-      <p className="mt-3">{message}</p>
+      <p>{message}</p>
       {allMovies.length > 0 && (
-        <table className="table table-bordered mt-3">
+        <table className="table mt-3">
           <thead>
             <tr>
               <th>Title</th>
@@ -47,9 +40,32 @@ const Movie = () => {
               <th></th>
             </tr>
           </thead>
-          <tbody>{displayMovies}</tbody>
+          <tbody>
+            {paginatedMovies.map((movie) => (
+              <tr key={movie._id}>
+                <td>{movie.title}</td>
+                <td>{movie.genre.genre}</td>
+                <td>{movie.numberInStock}</td>
+                <td>{movie.dailyRentalRate}</td>
+                <td>
+                  <button
+                    onClick={() => deleteMovie(movie._id)}
+                    className="btn btn-sm btn-danger"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       )}
+      <Pagination
+        moviesCount={allMovies.length}
+        pageSize={pageSize}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
     </>
   );
 };
