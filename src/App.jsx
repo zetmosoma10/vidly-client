@@ -1,8 +1,10 @@
+import Movie from "./components/Movie";
+
 function App() {
   return (
-    <>
-      <h1>Hello Zet</h1>
-    </>
+    <main className="container">
+      <Movie />
+    </main>
   );
 }
 
