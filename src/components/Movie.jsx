@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { movies } from "../services/fakeMovieService";
-import { paginate } from "../utils/paginate";
-import { displayMovieMessage } from "../utils/displayMovieMessage";
 import { genres } from "../services/fakeGenreService";
+import { paginate } from "../utils/paginate";
 import Pagination from "./common/Pagination";
 import ListGroup from "./common/ListGroup";
+import MoviesTable from "./MoviesTable";
 
 const Movie = () => {
   const [allMovies, setAllMovies] = useState(movies);
@@ -25,6 +25,7 @@ const Movie = () => {
 
   const onSelectGenre = (genre) => {
     setSelectedGenre(genre);
+    setCurrentPage(1);
   };
 
   const filtered = selectedGenre
@@ -43,37 +44,12 @@ const Movie = () => {
         />
       </div>
       <div className="col">
-        <p>{displayMovieMessage(filtered)}</p>
         {filtered.length > 0 && (
-          <table className="table mt-3">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Genre</th>
-                <th>NumberInStock</th>
-                <th>DailyRentalRate</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedMovies.map((movie) => (
-                <tr key={movie._id}>
-                  <td>{movie.title}</td>
-                  <td>{movie.genre.genre}</td>
-                  <td>{movie.numberInStock}</td>
-                  <td>{movie.dailyRentalRate}</td>
-                  <td>
-                    <button
-                      onClick={() => deleteMovie(movie._id)}
-                      className="btn btn-sm btn-danger"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <MoviesTable
+            paginatedMovies={paginatedMovies}
+            deleteMovie={deleteMovie}
+            filtered={filtered}
+          />
         )}
         <Pagination
           moviesCount={filtered.length}
