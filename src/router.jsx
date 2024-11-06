@@ -7,6 +7,7 @@ import MovieDetails from "./pages/MovieDetails";
 import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import SaveMoviePage from "./pages/SaveMoviePage";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "movie/:id",
         element: <MovieDetails />,
+      },
+      {
+        path: "movie/new",
+        element: <SaveMoviePage />,
       },
       {
         path: "login",
