@@ -1,16 +1,33 @@
 import { displayMovieMessage } from "../utils/displayMovieMessage";
 
-const MoviesTable = ({ paginatedMovies, deleteMovie, filtered }) => {
+const MoviesTable = ({ paginatedMovies, deleteMovie, filtered, onSort }) => {
   return (
     <>
       <p>{displayMovieMessage(filtered)}</p>
       <table className="table mt-3">
         <thead>
           <tr>
-            <th>Title</th>
-            <th>Genre</th>
-            <th>NumberInStock</th>
-            <th>DailyRentalRate</th>
+            <th style={{ cursor: "pointer" }} onClick={() => onSort("title")}>
+              Title
+            </th>
+            <th
+              style={{ cursor: "pointer" }}
+              onClick={() => onSort("genre.genre")}
+            >
+              Genre
+            </th>
+            <th
+              style={{ cursor: "pointer" }}
+              onClick={() => onSort("numberInStock")}
+            >
+              Stock
+            </th>
+            <th
+              style={{ cursor: "pointer" }}
+              onClick={() => onSort("dailyRentalRate")}
+            >
+              Rate
+            </th>
             <th></th>
           </tr>
         </thead>

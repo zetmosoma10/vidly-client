@@ -5,11 +5,13 @@ import { paginate } from "../utils/paginate";
 import Pagination from "./common/Pagination";
 import ListGroup from "./common/ListGroup";
 import MoviesTable from "./MoviesTable";
+import _ from "lodash";
 
 const Movie = () => {
   const [allMovies, setAllMovies] = useState(movies);
   const [allGenres, setAllGenres] = useState(genres);
   const [selectedGenre, setSelectedGenre] = useState(null);
+  const [sortColumn, setSortColumn] = useState({ path: "title", order: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
 
@@ -28,11 +30,26 @@ const Movie = () => {
     setCurrentPage(1);
   };
 
+  const onSort = (path) => {
+    setSortColumn((prevSortColumn) => {
+      if (prevSortColumn.path === path) {
+        return {
+          ...prevSortColumn,
+          order: prevSortColumn.order === "asc" ? "desc" : "asc",
+        };
+      } else {
+        return { path, order: "asc" };
+      }
+    });
+  };
+
   const filtered = selectedGenre
     ? allMovies.filter((m) => m.genre.genre === selectedGenre)
     : allMovies;
 
-  const paginatedMovies = paginate(filtered, currentPage, pageSize);
+  const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+  const paginatedMovies = paginate(sorted, currentPage, pageSize);
 
   return (
     <div className="row ">
@@ -49,6 +66,7 @@ const Movie = () => {
             paginatedMovies={paginatedMovies}
             deleteMovie={deleteMovie}
             filtered={filtered}
+            onSort={onSort}
           />
         )}
         <Pagination
