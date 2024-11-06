@@ -5,6 +5,7 @@ import Customer from "./pages/Customer";
 import Rentals from "./pages/Rentals";
 import MovieDetails from "./pages/MovieDetails";
 import NotFoundPage from "./pages/NotFoundPage";
+import LoginPage from "./pages/LoginPage";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "movie/:id",
         element: <MovieDetails />,
+      },
+      {
+        path: "login",
+        element: <LoginPage />,
       },
       {
         path: "*",
