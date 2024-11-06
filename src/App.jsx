@@ -1,10 +1,14 @@
 import Movie from "./components/Movie";
+import NavBar from "./components/NavBar";
 
 function App() {
   return (
-    <main className="container">
-      <Movie />
-    </main>
+    <div>
+      <NavBar />
+      <main className="container mt-5">
+        <Movie />
+      </main>
+    </div>
   );
 }
 
