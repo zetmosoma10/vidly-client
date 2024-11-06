@@ -27,7 +27,11 @@ const Movie = () => {
     setSelectedGenre(genre);
   };
 
-  const paginatedMovies = paginate(allMovies, currentPage, pageSize);
+  const filtered = selectedGenre
+    ? allMovies.filter((m) => m.genre.genre === selectedGenre)
+    : allMovies;
+
+  const paginatedMovies = paginate(filtered, currentPage, pageSize);
 
   return (
     <div className="row ">
@@ -39,8 +43,8 @@ const Movie = () => {
         />
       </div>
       <div className="col">
-        <p>{displayMovieMessage(allMovies)}</p>
-        {allMovies.length > 0 && (
+        <p>{displayMovieMessage(filtered)}</p>
+        {filtered.length > 0 && (
           <table className="table mt-3">
             <thead>
               <tr>
@@ -72,7 +76,7 @@ const Movie = () => {
           </table>
         )}
         <Pagination
-          moviesCount={allMovies.length}
+          moviesCount={filtered.length}
           pageSize={pageSize}
           currentPage={currentPage}
           onPageChange={handlePageChange}
