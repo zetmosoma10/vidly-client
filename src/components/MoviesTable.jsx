@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { displayMovieMessage } from "../utils/displayMovieMessage";
 
 const MoviesTable = ({ paginatedMovies, deleteMovie, filtered, onSort }) => {
@@ -34,7 +35,9 @@ const MoviesTable = ({ paginatedMovies, deleteMovie, filtered, onSort }) => {
         <tbody>
           {paginatedMovies.map((movie) => (
             <tr key={movie._id}>
-              <td>{movie.title}</td>
+              <td>
+                <Link to={`movie/${movie._id}`}>{movie.title}</Link>
+              </td>
               <td>{movie.genre.genre}</td>
               <td>{movie.numberInStock}</td>
               <td>{movie.dailyRentalRate}</td>
