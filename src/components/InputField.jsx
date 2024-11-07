@@ -9,7 +9,7 @@ const InputField = ({
 }) => {
   return (
     <div className="mb-3">
-      <label htmlFor={IdleDeadline} className="form-label">
+      <label htmlFor={id} className="form-label">
         {label}
       </label>
       <input

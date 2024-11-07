@@ -1,13 +1,28 @@
 import { Link } from "react-router-dom";
 import { displayMovieMessage } from "../utils/displayMovieMessage";
 
-const MoviesTable = ({ paginatedMovies, deleteMovie, filtered, onSort }) => {
+const MoviesTable = ({
+  paginatedMovies,
+  deleteMovie,
+  filtered,
+  onSort,
+  onSearchChange,
+  searchQuery,
+}) => {
   return (
     <>
       <Link to="movie/new" className="btn btn-primary mb-3">
         New Movie
       </Link>
-      <p>{displayMovieMessage(filtered)}</p>
+      <p className="mb-3">{displayMovieMessage(filtered)}</p>
+      <input
+        type="text"
+        name="search"
+        placeholder="Search..."
+        className="form-control"
+        value={searchQuery}
+        onChange={onSearchChange}
+      />
       <table className="table mt-3">
         <thead>
           <tr>

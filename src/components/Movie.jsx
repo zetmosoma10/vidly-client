@@ -10,6 +10,7 @@ import _ from "lodash";
 const Movie = () => {
   const [allMovies, setAllMovies] = useState(movies);
   const [allGenres, setAllGenres] = useState(genres);
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [sortColumn, setSortColumn] = useState({ path: "title", order: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
@@ -28,6 +29,13 @@ const Movie = () => {
   const onSelectGenre = (genre) => {
     setSelectedGenre(genre);
     setCurrentPage(1);
+    setSearchQuery("");
+  };
+
+  const onSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setSelectedGenre(null); // Clear genre selection on search
+    setCurrentPage(1); // Reset to the first page
   };
 
   const onSort = (path) => {
@@ -43,7 +51,11 @@ const Movie = () => {
     });
   };
 
-  const filtered = selectedGenre
+  const filtered = searchQuery
+    ? allMovies.filter((m) =>
+        m.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : selectedGenre
     ? allMovies.filter((m) => m.genre.genre === selectedGenre)
     : allMovies;
 
@@ -67,6 +79,8 @@ const Movie = () => {
             deleteMovie={deleteMovie}
             filtered={filtered}
             onSort={onSort}
+            searchQuery={searchQuery}
+            onSearchChange={onSearchChange}
           />
         )}
         <Pagination
