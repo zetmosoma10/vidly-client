@@ -1,20 +1,47 @@
-import { useState } from "react";
-import { movies } from "../services/fakeMovieService";
-import { genres } from "../services/fakeGenreService";
+import { useEffect, useState } from "react";
 import { paginate } from "../utils/paginate";
 import Pagination from "./common/Pagination";
 import ListGroup from "./common/ListGroup";
 import MoviesTable from "./MoviesTable";
 import _ from "lodash";
+import axios from "axios";
+
+const url = "https://vidly-api-t652.onrender.com";
 
 const Movie = () => {
-  const [allMovies, setAllMovies] = useState(movies);
-  const [allGenres, setAllGenres] = useState(genres);
+  const [allMovies, setAllMovies] = useState([]);
+  const [allGenres, setAllGenres] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [sortColumn, setSortColumn] = useState({ path: "title", order: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
+
+  useEffect(() => {
+    const getMovies = async () => {
+      try {
+        const {
+          data: { data },
+        } = await axios.get(`${url}/api/movies`);
+        setAllMovies(data.movies);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    const getGenres = async () => {
+      try {
+        const {
+          data: { data },
+        } = await axios.get(`${url}/api/genres`);
+        setAllGenres(data.genres);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getMovies();
+    getGenres();
+  }, []);
 
   const deleteMovie = (id) => {
     setAllMovies((prevMovies) => {
