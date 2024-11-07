@@ -4,9 +4,7 @@ import Pagination from "./common/Pagination";
 import ListGroup from "./common/ListGroup";
 import MoviesTable from "./MoviesTable";
 import _ from "lodash";
-import axios from "axios";
-
-const url = "https://vidly-api-t652.onrender.com";
+import http from "../services/httpServices";
 
 const Movie = () => {
   const [allMovies, setAllMovies] = useState([]);
@@ -18,29 +16,15 @@ const Movie = () => {
   const pageSize = 4;
 
   useEffect(() => {
-    const getMovies = async () => {
-      try {
-        const {
-          data: { data },
-        } = await axios.get(`${url}/api/movies`);
-        setAllMovies(data.movies);
-      } catch (err) {
-        console.log(err);
-      }
+    const fetchData = async () => {
+      const { movies } = await http.getMovies();
+      const { genres } = await http.getGenres();
+
+      setAllGenres(genres);
+      setAllMovies(movies);
     };
 
-    const getGenres = async () => {
-      try {
-        const {
-          data: { data },
-        } = await axios.get(`${url}/api/genres`);
-        setAllGenres(data.genres);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getMovies();
-    getGenres();
+    fetchData();
   }, []);
 
   const deleteMovie = (id) => {
