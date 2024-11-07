@@ -4,6 +4,9 @@ import { displayMovieMessage } from "../utils/displayMovieMessage";
 const MoviesTable = ({ paginatedMovies, deleteMovie, filtered, onSort }) => {
   return (
     <>
+      <Link to="movie/new" className="btn btn-primary mb-3">
+        New Movie
+      </Link>
       <p>{displayMovieMessage(filtered)}</p>
       <table className="table mt-3">
         <thead>

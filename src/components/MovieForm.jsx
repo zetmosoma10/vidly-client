@@ -5,18 +5,18 @@ import { genres } from "./../services/fakeGenreService";
 
 const schema = z.object({
   title: z.string().min(4, "Title must be at least 4 characters"),
-  genre: z.string(),
+  genre: z.string().min(1, "Genre is required"),
   stock: z
-    .number()
+    .number({ invalid_type_error: "stock is required" })
     .min(0, "Stock should be between 0 and 100")
     .max(100, "Stock should be between 0 and 100"),
   rate: z
-    .number()
+    .number({ invalid_type_error: "rate is required" })
     .min(0, "rate must be between 0 and 10")
     .max(10, "rate must be between 0 and 10"),
 });
 
-const MovieForm = () => {
+const MovieForm = ({ title, genre, stock, rate }) => {
   const {
     register,
     handleSubmit,
@@ -38,6 +38,7 @@ const MovieForm = () => {
           type="text"
           className={`form-control ${errors.title ? "is-invalid" : ""}`}
           id="title"
+          defaultValue={title || ""}
           {...register("title")}
         />
         {errors.title && (
@@ -51,8 +52,10 @@ const MovieForm = () => {
         <select
           id="genre"
           className={`form-select ${errors.title ? "is-invalid" : ""}`}
+          defaultValue={genre || ""}
+          {...register("genre")}
         >
-          <option selected></option>
+          <option value="">--Select genre--</option>
           {genres.map((genre) => (
             <option key={genre._id} value={genre.genre}>
               {genre.genre}
@@ -68,25 +71,26 @@ const MovieForm = () => {
           Number in Stock
         </label>
         <input
-          type="stock"
+          type="string"
           className={`form-control ${errors.stock ? "is-invalid" : ""}`}
-          id="email"
-          {...register("stock")}
+          id="stock"
+          defaultValue={stock || ""}
+          {...register("stock", { valueAsNumber: true })}
         />
         {errors.stock && (
           <div className="invalid-feedback">{errors.stock.message}</div>
         )}
       </div>
-
       <div className="mb-3">
         <label htmlFor="rate" className="form-label">
           Rate
         </label>
         <input
-          type="text"
+          type="string"
           className={`form-control ${errors.rate ? "is-invalid" : ""}`}
           id="rate"
-          {...register("rate")}
+          defaultValue={rate || ""}
+          {...register("rate", { valueAsNumber: true })}
         />
         {errors.rate && (
           <div className="invalid-feedback">{errors.rate.message}</div>
