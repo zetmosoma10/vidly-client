@@ -43,6 +43,10 @@ const router = createBrowserRouter([
         element: <RegisterPage />,
       },
       {
+        path: "not-found",
+        element: <NotFoundPage />,
+      },
+      {
         path: "*",
         element: <NotFoundPage />,
       },

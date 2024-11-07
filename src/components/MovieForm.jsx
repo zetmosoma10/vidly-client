@@ -2,29 +2,62 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { genres } from "./../services/fakeGenreService";
+import { movies } from "../services/fakeMovieService";
+import { nanoid } from "nanoid";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   title: z.string().min(4, "Title must be at least 4 characters"),
   genre: z.string().min(1, "Genre is required"),
-  stock: z
+  numberInStock: z
     .number({ invalid_type_error: "stock is required" })
     .min(0, "Stock should be between 0 and 100")
     .max(100, "Stock should be between 0 and 100"),
-  rate: z
+  dailyRentalRate: z
     .number({ invalid_type_error: "rate is required" })
     .min(0, "rate must be between 0 and 10")
     .max(10, "rate must be between 0 and 10"),
 });
 
-const MovieForm = ({ title, genre, stock, rate }) => {
+const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = (data) => {
-    console.log(data);
+    const movieId = _id || nanoid(); // Use provided ID or generate a new one
+
+    // Check if the movie exists
+    const existingMovieIndex = movies.findIndex(
+      (movie) => movie._id === movieId
+    );
+
+    if (existingMovieIndex > -1) {
+      // Update existing movie
+      movies[existingMovieIndex] = {
+        ...movies[existingMovieIndex],
+        ...data,
+        _id: movieId,
+        genre:
+          genres.find((g) => g.genre === data.genre) ||
+          movies[existingMovieIndex].genre,
+      };
+    } else {
+      // Save new movie
+      movies.push({
+        _id: movieId,
+        ...data,
+        genre: genres.find((g) => g.genre === data.genre), // Assign genre object based on name
+      });
+
+      reset();
+    }
+
+    navigate("/");
   };
 
   return (
@@ -72,13 +105,13 @@ const MovieForm = ({ title, genre, stock, rate }) => {
         </label>
         <input
           type="string"
-          className={`form-control ${errors.stock ? "is-invalid" : ""}`}
+          className={`form-control ${errors.numberInStock ? "is-invalid" : ""}`}
           id="stock"
-          defaultValue={stock || ""}
-          {...register("stock", { valueAsNumber: true })}
+          defaultValue={numberInStock || ""}
+          {...register("numberInStock", { valueAsNumber: true })}
         />
-        {errors.stock && (
-          <div className="invalid-feedback">{errors.stock.message}</div>
+        {errors.numberInStock && (
+          <div className="invalid-feedback">{errors.numberInStock.message}</div>
         )}
       </div>
       <div className="mb-3">
@@ -87,13 +120,17 @@ const MovieForm = ({ title, genre, stock, rate }) => {
         </label>
         <input
           type="string"
-          className={`form-control ${errors.rate ? "is-invalid" : ""}`}
+          className={`form-control ${
+            errors.dailyRentalRate ? "is-invalid" : ""
+          }`}
           id="rate"
-          defaultValue={rate || ""}
-          {...register("rate", { valueAsNumber: true })}
+          defaultValue={dailyRentalRate || ""}
+          {...register("dailyRentalRate", { valueAsNumber: true })}
         />
-        {errors.rate && (
-          <div className="invalid-feedback">{errors.rate.message}</div>
+        {errors.dailyRentalRate && (
+          <div className="invalid-feedback">
+            {errors.dailyRentalRate.message}
+          </div>
         )}
       </div>
       <button className="btn btn-primary">Save</button>
