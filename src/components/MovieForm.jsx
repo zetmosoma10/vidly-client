@@ -5,6 +5,7 @@ import { genres } from "./../services/fakeGenreService";
 import { movies } from "../services/fakeMovieService";
 import { nanoid } from "nanoid";
 import { useNavigate } from "react-router-dom";
+import InputField from "./InputField";
 
 const schema = z.object({
   title: z.string().min(4, "Title must be at least 4 characters"),
@@ -63,21 +64,13 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-50 mx-auto mb-5">
       <h2 className="mb-5">Movie Form</h2>
-      <div className="mb-3">
-        <label htmlFor="title" className="form-label">
-          Title
-        </label>
-        <input
-          type="text"
-          className={`form-control ${errors.title ? "is-invalid" : ""}`}
-          id="title"
-          defaultValue={title || ""}
-          {...register("title")}
-        />
-        {errors.title && (
-          <div className="invalid-feedback">{errors.title.message}</div>
-        )}
-      </div>
+      <InputField
+        id="title"
+        label="Title"
+        errors={errors}
+        register={register}
+        defaultValue={title}
+      />
       <div className="mb-3">
         <label htmlFor="genre" className="form-label">
           Genre
@@ -99,40 +92,22 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
           <div className="invalid-feedback">{errors.genre.message}</div>
         )}
       </div>
-      <div className="mb-3">
-        <label htmlFor="stock" className="form-label">
-          Number in Stock
-        </label>
-        <input
-          type="string"
-          className={`form-control ${errors.numberInStock ? "is-invalid" : ""}`}
-          id="stock"
-          defaultValue={numberInStock || ""}
-          {...register("numberInStock", { valueAsNumber: true })}
-        />
-        {errors.numberInStock && (
-          <div className="invalid-feedback">{errors.numberInStock.message}</div>
-        )}
-      </div>
-      <div className="mb-3">
-        <label htmlFor="rate" className="form-label">
-          Rate
-        </label>
-        <input
-          type="string"
-          className={`form-control ${
-            errors.dailyRentalRate ? "is-invalid" : ""
-          }`}
-          id="rate"
-          defaultValue={dailyRentalRate || ""}
-          {...register("dailyRentalRate", { valueAsNumber: true })}
-        />
-        {errors.dailyRentalRate && (
-          <div className="invalid-feedback">
-            {errors.dailyRentalRate.message}
-          </div>
-        )}
-      </div>
+      <InputField
+        id="numberInStock"
+        label="Number in Stock"
+        errors={errors}
+        register={register}
+        defaultValue={numberInStock}
+        registerOptions={{ valueAsNumber: true }}
+      />
+      <InputField
+        id="dailyRentalRate"
+        label="Rate"
+        errors={errors}
+        register={register}
+        defaultValue={dailyRentalRate}
+        registerOptions={{ valueAsNumber: true }}
+      />
       <button className="btn btn-primary">Save</button>
     </form>
   );
