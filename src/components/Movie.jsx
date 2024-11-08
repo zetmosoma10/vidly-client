@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 const Movie = () => {
   const [allMovies, setAllMovies] = useState([]);
   const [allGenres, setAllGenres] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [sortColumn, setSortColumn] = useState({ path: "title", order: "asc" });
@@ -19,11 +20,13 @@ const Movie = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const { movies } = await getMovies();
       const { genres } = await getGenres();
 
       setAllGenres(genres);
       setAllMovies(movies);
+      setIsLoading(false);
     };
 
     fetchData();
@@ -85,6 +88,8 @@ const Movie = () => {
   const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
   const paginatedMovies = paginate(sorted, currentPage, pageSize);
+
+  if (isLoading) return <h2>Loading...</h2>;
 
   return (
     <div className="row ">
