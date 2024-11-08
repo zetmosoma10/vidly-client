@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
-import MovieForm from "../components/MovieForm";
 import { useEffect, useState } from "react";
 import { getMovie } from "../services/moviesServices";
+import MovieForm from "../components/MovieForm";
 
 const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
