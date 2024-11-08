@@ -18,8 +18,16 @@ const getMovie = async (id) => {
   return data;
 };
 
-const updateMovie = async (id, movie) => {
-  const { data } = await axiosInstance.patch(`/api/movies/${id}`, movie);
+const saveMovie = async (movie) => {
+  if (movie._id) {
+    const { data } = await axiosInstance.patch(
+      `/api/movies/${movie._id}`,
+      movie.body
+    );
+    return data;
+  }
+
+  const { data } = await axiosInstance.post("/api/movies", movie.body);
   return data;
 };
 
@@ -27,4 +35,4 @@ const removeMovie = async (id) => {
   return await axiosInstance.delete(`/api/movies/${id}`);
 };
 
-export { getMovies, removeMovie, getMovie, updateMovie };
+export { getMovies, removeMovie, getMovie, saveMovie };

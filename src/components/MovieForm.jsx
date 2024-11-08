@@ -3,13 +3,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { updateMovie } from "../services/moviesServices";
+import { saveMovie } from "../services/moviesServices";
 import { toast } from "react-toastify";
 import _ from "lodash";
 
 const schema = z.object({
   title: z.string().min(4, "Title must be at least 4 characters"),
-  genre: z.string().min(1, "Genre is required"),
+  genreId: z.string().min(1, "Genre is required"),
   numberInStock: z
     .number({ invalid_type_error: "stock is required" })
     .min(0, "Stock should be between 0 and 100")
@@ -27,18 +27,31 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data) => {
-    const movieData = _.omit(data, ["genre"]);
-
+    console.log(data);
     try {
-      const res = await updateMovie(_id, movieData);
-      if (res.status === "success") {
-        toast.success("Movie updated successfully");
-        navigate("/", { replace: true });
+      if (_id) {
+        // const body = _.omit(data, ["genreId"]);
+        const body = data;
+
+        const res = await saveMovie({ _id, body });
+        if (res.status === "success") {
+          toast.success("Movie updated successfully");
+          return navigate("/", { replace: true });
+        }
+      } else {
+        const genre = genres.find((g) => g.genre === data.genreId);
+        const body = _.set(data, "genreId", genre._id);
+
+        const res = await saveMovie({ body });
+        console.log(res);
+        if (res.status === "success") {
+          toast.success("Movie created successfully");
+          return navigate("/", { replace: true });
+        }
       }
     } catch (err) {
       if (err.status >= 400 && err.status < 500)
@@ -62,9 +75,9 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
         </label>
         <select
           id="genre"
-          className={`form-select ${errors.title ? "is-invalid" : ""}`}
+          className={`form-select ${errors.genreId ? "is-invalid" : ""}`}
           defaultValue={genre || ""}
-          {...register("genre")}
+          {...register("genreId")}
         >
           <option value="">--Select genre--</option>
           {genres.map((genre) => (
@@ -73,8 +86,8 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
             </option>
           ))}
         </select>
-        {errors.genre && (
-          <div className="invalid-feedback">{errors.genre.message}</div>
+        {errors.genreId && (
+          <div className="invalid-feedback">{errors.genreId.message}</div>
         )}
       </div>
       <InputField
@@ -93,7 +106,9 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
         defaultValue={dailyRentalRate}
         registerOptions={{ valueAsNumber: true }}
       />
-      <button className="btn btn-primary">Save</button>
+      <button className="btn btn-primary" disabled={isSubmitting}>
+        {isSubmitting ? "Saving..." : "Save"}
+      </button>
     </form>
   );
 };
