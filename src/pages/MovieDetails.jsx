@@ -8,7 +8,6 @@ const MovieDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log(movie);
 
   useEffect(() => {
     const fetchMovie = async () => {

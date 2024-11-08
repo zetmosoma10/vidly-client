@@ -5,26 +5,24 @@ import ListGroup from "./common/ListGroup";
 import MoviesTable from "./MoviesTable";
 import _ from "lodash";
 import { getMovies, removeMovie } from "../services/moviesServices";
-import { getGenres } from "../services/genresServices";
 import { toast } from "react-toastify";
+import { useOutletContext } from "react-router-dom";
 
 const Movie = () => {
   const [allMovies, setAllMovies] = useState([]);
-  const [allGenres, setAllGenres] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [sortColumn, setSortColumn] = useState({ path: "title", order: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
+  const allGenres = useOutletContext();
   const pageSize = 4;
 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       const { movies } = await getMovies();
-      const { genres } = await getGenres();
 
-      setAllGenres(genres);
       setAllMovies(movies);
       setIsLoading(false);
     };
@@ -40,8 +38,7 @@ const Movie = () => {
     });
 
     try {
-      const deletedMovie = await removeMovie(id);
-      console.log(deletedMovie);
+      await removeMovie(id);
     } catch (err) {
       setAllMovies(oldMovies);
       toast.error(err.response.data.message);

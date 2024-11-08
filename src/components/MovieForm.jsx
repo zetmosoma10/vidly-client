@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { genres } from "../services/fakeGenreService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import InputField from "./InputField";
 
 const schema = z.object({
@@ -20,6 +19,8 @@ const schema = z.object({
 
 const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
   const navigate = useNavigate();
+  const genres = useOutletContext();
+
   const {
     register,
     handleSubmit,
