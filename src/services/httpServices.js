@@ -7,7 +7,7 @@ const getMovies = async () => {
     } = await axiosInstance.get("/api/movies");
     return data;
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
@@ -18,7 +18,7 @@ const getGenres = async () => {
     } = await axiosInstance.get("/api/genres");
     return data;
   } catch (err) {
-    console.log(err);
+    return err;
   }
 };
 
