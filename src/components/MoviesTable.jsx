@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { displayMovieMessage } from "../utils/displayMovieMessage";
-import { toast } from "react-toastify";
 
 const MoviesTable = ({
   paginatedMovies,
@@ -10,10 +9,6 @@ const MoviesTable = ({
   onSearchChange,
   searchQuery,
 }) => {
-  const toastNotification = () => {
-    toast.error("Movie already deleted");
-  };
-
   return (
     <>
       <Link to="movie/new" className="btn btn-primary mb-3">
@@ -67,7 +62,6 @@ const MoviesTable = ({
               <td>
                 <button
                   onClick={() => {
-                    toastNotification();
                     deleteMovie(movie._id);
                   }}
                   className="btn btn-sm btn-danger"

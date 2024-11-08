@@ -4,7 +4,9 @@ import Pagination from "./common/Pagination";
 import ListGroup from "./common/ListGroup";
 import MoviesTable from "./MoviesTable";
 import _ from "lodash";
-import http from "../services/httpServices";
+import { getMovies, removeMovie } from "../services/moviesServices";
+import { getGenres } from "../services/genresServices";
+import { toast } from "react-toastify";
 
 const Movie = () => {
   const [allMovies, setAllMovies] = useState([]);
@@ -17,8 +19,8 @@ const Movie = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { movies } = await http.getMovies();
-      const { genres } = await http.getGenres();
+      const { movies } = await getMovies();
+      const { genres } = await getGenres();
 
       setAllGenres(genres);
       setAllMovies(movies);
@@ -27,10 +29,20 @@ const Movie = () => {
     fetchData();
   }, []);
 
-  const deleteMovie = (id) => {
+  const deleteMovie = async (id) => {
+    const oldMovies = allMovies;
+
     setAllMovies((prevMovies) => {
       return prevMovies.filter((m) => m._id !== id);
     });
+
+    try {
+      const deletedMovie = await removeMovie(id);
+      console.log(deletedMovie);
+    } catch (err) {
+      setAllMovies(oldMovies);
+      toast.error(err.response.data.message);
+    }
   };
 
   const handlePageChange = (page) => {

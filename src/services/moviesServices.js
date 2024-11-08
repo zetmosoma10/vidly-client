@@ -11,18 +11,8 @@ const getMovies = async () => {
   }
 };
 
-const getGenres = async () => {
-  try {
-    const {
-      data: { data },
-    } = await axiosInstance.get("/api/genres");
-    return data;
-  } catch (err) {
-    return err;
-  }
+const removeMovie = async (id) => {
+  return await axiosInstance.delete(`/api/movies/${id}`);
 };
 
-export default {
-  getGenres,
-  getMovies,
-};
+export { getMovies, removeMovie };
