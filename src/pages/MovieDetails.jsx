@@ -1,26 +1,32 @@
 import { useNavigate, useParams } from "react-router-dom";
 import MovieForm from "../components/MovieForm";
-import { movies } from "./../services/fakeMovieService";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getMovie } from "../services/moviesServices";
 
 const MovieDetails = () => {
+  const [movie, setMovie] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  const currentMovie = movies.find((m) => m._id === id);
+  console.log(movie);
 
   useEffect(() => {
-    if (!currentMovie) return navigate("/not-found", { replace: true });
-  }, [currentMovie, navigate]);
+    const fetchMovie = async () => {
+      const movie = await getMovie(id);
+      if (!movie.movie) return navigate("/not-found", { replace: true });
+      setMovie(movie.movie);
+    };
+    fetchMovie();
+  }, [id]);
 
-  if (!currentMovie) return null;
+  if (!movie) return null;
 
   return (
     <MovieForm
-      title={currentMovie.title}
-      dailyRentalRate={currentMovie.dailyRentalRate}
-      numberInStock={currentMovie.numberInStock}
-      genre={currentMovie.genre.genre}
-      _id={currentMovie._id}
+      title={movie.title}
+      dailyRentalRate={movie.dailyRentalRate}
+      numberInStock={movie.numberInStock}
+      genre={movie.genre.genre}
+      _id={movie._id}
     />
   );
 };

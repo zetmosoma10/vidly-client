@@ -1,9 +1,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { genres } from "./../services/fakeGenreService";
-import { movies } from "../services/fakeMovieService";
-import { nanoid } from "nanoid";
+import { genres } from "../services/fakeGenreService";
 import { useNavigate } from "react-router-dom";
 import InputField from "./InputField";
 
@@ -30,35 +28,7 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
   } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = (data) => {
-    const movieId = _id || nanoid(); // Use provided ID or generate a new one
-
-    // Check if the movie exists
-    const existingMovieIndex = movies.findIndex(
-      (movie) => movie._id === movieId
-    );
-
-    if (existingMovieIndex > -1) {
-      // Update existing movie
-      movies[existingMovieIndex] = {
-        ...movies[existingMovieIndex],
-        ...data,
-        _id: movieId,
-        genre:
-          genres.find((g) => g.genre === data.genre) ||
-          movies[existingMovieIndex].genre,
-      };
-    } else {
-      // Save new movie
-      movies.push({
-        _id: movieId,
-        ...data,
-        genre: genres.find((g) => g.genre === data.genre), // Assign genre object based on name
-      });
-
-      reset();
-    }
-
-    navigate("/");
+    console.log(data);
   };
 
   return (
