@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { singUp } from "../services/usersServices";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -15,6 +16,7 @@ const schema = z.object({
 
 const RegisterForm = () => {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState(null);
   const {
     register,
     handleSubmit,
@@ -24,6 +26,7 @@ const RegisterForm = () => {
   const onSubmit = async (data) => {
     console.log(data);
     try {
+      setErrorMessage(null);
       const res = await singUp(data);
       console.log(res.data.status);
       if (res.data.status === "success") {
@@ -31,13 +34,15 @@ const RegisterForm = () => {
         navigate("/", { replace: true });
       }
     } catch (err) {
-      console.log(err);
+      if (err.status >= 400 && err.status < 500)
+        setErrorMessage(err.response.data.message);
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-50 mx-auto">
       <h2 className="mb-5">Register</h2>
+      {errorMessage && <h5 className="mb-3 text-danger">{errorMessage}</h5>}
       <div className="mb-3">
         <label htmlFor="password" className="form-label">
           Name
