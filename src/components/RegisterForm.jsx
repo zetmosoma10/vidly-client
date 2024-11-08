@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { singUp } from "../services/usersServices";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -12,14 +14,25 @@ const schema = z.object({
 });
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema) });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    try {
+      const res = await singUp(data);
+      console.log(res.data.status);
+      if (res.data.status === "success") {
+        localStorage.setItem("token", res.data.token);
+        navigate("/", { replace: true });
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -68,7 +81,9 @@ const RegisterForm = () => {
           <div className="invalid-feedback">{errors.password.message}</div>
         )}
       </div>
-      <button className="btn btn-primary">Submit</button>
+      <button className="btn btn-primary" disabled={isSubmitting}>
+        {isSubmitting ? "Submitting..." : "Submit"}
+      </button>
     </form>
   );
 };
