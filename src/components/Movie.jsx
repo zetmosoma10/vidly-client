@@ -95,16 +95,14 @@ const Movie = () => {
         />
       </div>
       <div className="col">
-        {filtered.length > 0 && (
-          <MoviesTable
-            paginatedMovies={paginatedMovies}
-            deleteMovie={deleteMovie}
-            filtered={filtered}
-            onSort={onSort}
-            searchQuery={searchQuery}
-            onSearchChange={onSearchChange}
-          />
-        )}
+        <MoviesTable
+          paginatedMovies={paginatedMovies}
+          deleteMovie={deleteMovie}
+          filtered={filtered}
+          onSort={onSort}
+          searchQuery={searchQuery}
+          onSearchChange={onSearchChange}
+        />
         <Pagination
           moviesCount={filtered.length}
           pageSize={pageSize}

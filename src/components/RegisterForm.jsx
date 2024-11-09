@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { singUp } from "../services/usersServices";
 import { useState } from "react";
+import InputField from "./InputField";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -22,7 +23,6 @@ const RegisterForm = () => {
   } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       setErrorMessage(null);
       const res = await singUp(data);
@@ -40,49 +40,19 @@ const RegisterForm = () => {
     <form onSubmit={handleSubmit(onSubmit)} className="w-50 mx-auto">
       <h2 className="mb-5">Register</h2>
       {errorMessage && <h5 className="mb-3 text-danger">{errorMessage}</h5>}
-      <div className="mb-3">
-        <label htmlFor="password" className="form-label">
-          Name
-        </label>
-        <input
-          type="text"
-          className={`form-control ${errors.name ? "is-invalid" : ""}`}
-          id="password"
-          {...register("name")}
-        />
-        {errors.name && (
-          <div className="invalid-feedback">{errors.name.message}</div>
-        )}
-      </div>
-      <div className="mb-3">
-        <label htmlFor="email" className="form-label">
-          Email address
-        </label>
-        <input
-          type="email"
-          className={`form-control ${errors.email ? "is-invalid" : ""}`}
-          id="email"
-          {...register("email")}
-        />
-        {errors.email && (
-          <div className="invalid-feedback">{errors.email.message}</div>
-        )}
-      </div>
-
-      <div className="mb-3">
-        <label htmlFor="password" className="form-label">
-          Password
-        </label>
-        <input
-          type="text"
-          className={`form-control ${errors.password ? "is-invalid" : ""}`}
-          id="password"
-          {...register("password")}
-        />
-        {errors.password && (
-          <div className="invalid-feedback">{errors.password.message}</div>
-        )}
-      </div>
+      <InputField id="name" label="Name" errors={errors} register={register} />
+      <InputField
+        id="email"
+        label="Email address"
+        errors={errors}
+        register={register}
+      />
+      <InputField
+        id="password"
+        label="Password"
+        errors={errors}
+        register={register}
+      />
       <button className="btn btn-primary" disabled={isSubmitting}>
         {isSubmitting ? "Submitting..." : "Submit"}
       </button>

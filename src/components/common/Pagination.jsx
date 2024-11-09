@@ -8,11 +8,6 @@ const Pagination = ({ moviesCount, pageSize, currentPage, onPageChange }) => {
   return (
     <nav aria-label="Page navigation example mt-3">
       <ul className="pagination">
-        <li className="page-item">
-          <a className="page-link" href="#">
-            Previous
-          </a>
-        </li>
         {pages.map((page) => (
           <li
             key={page}
@@ -27,11 +22,6 @@ const Pagination = ({ moviesCount, pageSize, currentPage, onPageChange }) => {
             </a>
           </li>
         ))}
-        <li className="page-item">
-          <a className="page-link" href="#">
-            Next
-          </a>
-        </li>
       </ul>
     </nav>
   );

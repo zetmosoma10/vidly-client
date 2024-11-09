@@ -3,7 +3,7 @@ const InputField = ({
   label,
   errors,
   register,
-  defaultValue,
+  defaultValue = "",
   type = "text",
   registerOptions,
 }) => {

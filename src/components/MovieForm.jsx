@@ -1,13 +1,14 @@
-import InputField from "./InputField";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { toast } from "react-toastify";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
-import { saveMovie } from "../services/moviesServices";
-import { toast } from "react-toastify";
+import { z } from "zod";
 import _ from "lodash";
-import { useContext } from "react";
+import { saveMovie } from "../services/moviesServices";
 import { UserContext } from "../pages/HomeLayout";
+import InputField from "./InputField";
+import SelectInput from "./SelectInput";
 
 const schema = z.object({
   title: z.string().min(4, "Title must be at least 4 characters"),
@@ -33,9 +34,13 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
   } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data) => {
+    console.log(data);
     try {
       if (_id) {
-        const res = await saveMovie({ _id, data });
+        const genre = genres.find((g) => g.genre === data.genreId);
+        const body = _.set(data, "genreId", genre._id);
+
+        const res = await saveMovie({ _id, body });
         if (res.status === "success") {
           toast.success("Movie updated successfully");
           return navigate("/", { replace: true });
@@ -68,27 +73,14 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
         register={register}
         defaultValue={title}
       />
-      <div className="mb-3">
-        <label htmlFor="genre" className="form-label">
-          Genre
-        </label>
-        <select
-          id="genre"
-          className={`form-select ${errors.genreId ? "is-invalid" : ""}`}
-          defaultValue={genre || ""}
-          {...register("genreId")}
-        >
-          <option value="">--Select genre--</option>
-          {genres.map((genre) => (
-            <option key={genre._id} value={genre.genre}>
-              {genre.genre}
-            </option>
-          ))}
-        </select>
-        {errors.genreId && (
-          <div className="invalid-feedback">{errors.genreId.message}</div>
-        )}
-      </div>
+      <SelectInput
+        id="genreId"
+        label="Genre"
+        genres={genres}
+        errors={errors}
+        register={register}
+        defaultValue={genre}
+      />
       <InputField
         id="numberInStock"
         label="Number in Stock"

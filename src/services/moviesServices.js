@@ -24,6 +24,7 @@ const saveMovie = async (movie) => {
       `/api/movies/${movie._id}`,
       movie.body
     );
+    console.log(data);
     return data;
   }
 
