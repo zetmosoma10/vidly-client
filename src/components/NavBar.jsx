@@ -18,7 +18,7 @@ const NavBar = ({ currentUser }) => {
             <NavLink to="rentals" className="nav-link">
               Rentals
             </NavLink>
-            {!currentUser && (
+            {!currentUser?.name && (
               <>
                 <NavLink to="login" className="nav-link">
                   Login
@@ -28,10 +28,10 @@ const NavBar = ({ currentUser }) => {
                 </NavLink>
               </>
             )}
-            {currentUser && (
+            {currentUser?.name && (
               <>
                 <NavLink to="profile" className="nav-link">
-                  {currentUser}
+                  {currentUser?.name}
                 </NavLink>
                 <NavLink to="logout" className="nav-link">
                   Logout

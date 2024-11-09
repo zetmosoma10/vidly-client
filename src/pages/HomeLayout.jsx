@@ -21,7 +21,7 @@ const HomeLayout = () => {
     try {
       const token = localStorage.getItem("token");
       const user = jwtDecode(token);
-      setCurrentUser(user.name);
+      setCurrentUser(user);
     } catch (error) {}
 
     fetchData();

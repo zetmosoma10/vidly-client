@@ -52,6 +52,7 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
         }
       }
     } catch (err) {
+      console.log(err);
       if (err.status >= 400 && err.status < 500)
         toast.error(err.response.data.message);
     }

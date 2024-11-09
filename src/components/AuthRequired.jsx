@@ -5,7 +5,7 @@ import { UserContext } from "../pages/HomeLayout";
 const AuthRequired = () => {
   const { currentUser } = useContext(UserContext);
 
-  if (!currentUser) {
+  if (!currentUser?.name) {
     return (
       <Navigate to="login" state={{ message: "You should login first" }} />
     );

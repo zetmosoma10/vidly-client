@@ -13,7 +13,7 @@ const schema = z.object({
 const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const location = useLocation();
-  console.log(location);
+
   const {
     register,
     handleSubmit,

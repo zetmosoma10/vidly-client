@@ -51,7 +51,7 @@ const MoviesTable = ({
             >
               Rate
             </th>
-            {currentUser && <th></th>}
+            {currentUser?.isAdmin && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -63,7 +63,7 @@ const MoviesTable = ({
               <td>{movie.genre.genre}</td>
               <td>{movie.numberInStock}</td>
               <td>{movie.dailyRentalRate}</td>
-              {currentUser && (
+              {currentUser?.isAdmin && (
                 <td>
                   <button
                     onClick={() => {
