@@ -9,6 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import SaveMoviePage from "./pages/SaveMoviePage";
 import Logout from "./components/Logout";
+import AuthRequired from "./components/AuthRequired";
 
 const router = createBrowserRouter([
   {
@@ -32,8 +33,13 @@ const router = createBrowserRouter([
         element: <MovieDetails />,
       },
       {
-        path: "movie/new",
-        element: <SaveMoviePage />,
+        element: <AuthRequired />,
+        children: [
+          {
+            path: "movie/new",
+            element: <SaveMoviePage />,
+          },
+        ],
       },
       {
         path: "login",

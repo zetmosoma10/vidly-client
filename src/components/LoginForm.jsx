@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { login } from "../services/authServices";
+import auth from "../services/authServices";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -11,6 +12,8 @@ const schema = z.object({
 
 const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState(null);
+  const location = useLocation();
+  console.log(location);
   const {
     register,
     handleSubmit,
@@ -18,13 +21,12 @@ const LoginForm = () => {
   } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data) => {
+    location.state = null;
     try {
       setErrorMessage(null);
-      const res = await login(data);
-      if (res.data.status === "success") {
-        localStorage.setItem("token", res.data.token);
-        window.location.replace("/");
-      }
+      const res = await auth.login(data);
+      localStorage.setItem("token", res.data.token);
+      window.location.replace("/");
     } catch (err) {
       console.log(err);
       if (err.status >= 400 && err.status < 500)
@@ -32,10 +34,13 @@ const LoginForm = () => {
     }
   };
 
+  const infoText = location.state?.message || null;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-50 mx-auto">
       <h2 className="mb-5">Login</h2>
       {errorMessage && <h5 className="mb-3 text-danger">{errorMessage}</h5>}
+      {infoText && <h5 className="mb-3 text-danger">{infoText}</h5>}
       <div className="mb-3">
         <label htmlFor="email" className="form-label">
           Email address

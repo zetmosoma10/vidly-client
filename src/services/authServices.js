@@ -4,4 +4,4 @@ const login = (user) => {
   return axiosInstance.post("/api/auth", user);
 };
 
-export { login };
+export default { login };

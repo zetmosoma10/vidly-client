@@ -2,10 +2,12 @@ import InputField from "./InputField";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { saveMovie } from "../services/moviesServices";
 import { toast } from "react-toastify";
 import _ from "lodash";
+import { useContext } from "react";
+import { UserContext } from "../pages/HomeLayout";
 
 const schema = z.object({
   title: z.string().min(4, "Title must be at least 4 characters"),
@@ -22,7 +24,7 @@ const schema = z.object({
 
 const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
   const navigate = useNavigate();
-  const genres = useOutletContext();
+  const { genres } = useContext(UserContext);
 
   const {
     register,
@@ -31,13 +33,9 @@ const MovieForm = ({ title, genre, numberInStock, dailyRentalRate, _id }) => {
   } = useForm({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       if (_id) {
-        // const body = _.omit(data, ["genreId"]);
-        const body = data;
-
-        const res = await saveMovie({ _id, body });
+        const res = await saveMovie({ _id, data });
         if (res.status === "success") {
           toast.success("Movie updated successfully");
           return navigate("/", { replace: true });
