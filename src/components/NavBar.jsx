@@ -32,9 +32,14 @@ const NavBar = () => {
               </>
             )}
             {currentUser && (
-              <NavLink to="profile" className="nav-link">
-                {currentUser}
-              </NavLink>
+              <>
+                <NavLink to="profile" className="nav-link">
+                  {currentUser}
+                </NavLink>
+                <NavLink to="logout" className="nav-link">
+                  Logout
+                </NavLink>
+              </>
             )}
           </div>
         </div>

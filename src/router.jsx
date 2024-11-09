@@ -8,6 +8,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import SaveMoviePage from "./pages/SaveMoviePage";
+import Logout from "./components/Logout";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "login",
         element: <LoginPage />,
+      },
+      {
+        path: "logout",
+        element: <Logout />,
       },
       {
         path: "register",
