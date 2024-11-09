@@ -84,33 +84,37 @@ const Movie = () => {
 
   const paginatedMovies = paginate(sorted, currentPage, pageSize);
 
-  if (isLoading) return <h2>Loading...</h2>;
-
   return (
-    <div className="row ">
-      <div className="col-2">
-        <ListGroup
-          selectedGenre={selectedGenre}
-          onSelectGenre={onSelectGenre}
-        />
-      </div>
-      <div className="col">
-        <MoviesTable
-          paginatedMovies={paginatedMovies}
-          deleteMovie={deleteMovie}
-          filtered={filtered}
-          onSort={onSort}
-          searchQuery={searchQuery}
-          onSearchChange={onSearchChange}
-        />
-        <Pagination
-          moviesCount={filtered.length}
-          pageSize={pageSize}
-          currentPage={currentPage}
-          onPageChange={handlePageChange}
-        />
-      </div>
-    </div>
+    <>
+      {!isLoading ? (
+        <div className="row ">
+          <div className="col-2">
+            <ListGroup
+              selectedGenre={selectedGenre}
+              onSelectGenre={onSelectGenre}
+            />
+          </div>
+          <div className="col">
+            <MoviesTable
+              paginatedMovies={paginatedMovies}
+              deleteMovie={deleteMovie}
+              filtered={filtered}
+              onSort={onSort}
+              searchQuery={searchQuery}
+              onSearchChange={onSearchChange}
+            />
+            <Pagination
+              moviesCount={filtered.length}
+              pageSize={pageSize}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+            />
+          </div>
+        </div>
+      ) : (
+        <h3>Loading...</h3>
+      )}
+    </>
   );
 };
 
