@@ -2,7 +2,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { singUp } from "../services/usersServices";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 const schema = z.object({
@@ -15,7 +14,6 @@ const schema = z.object({
 });
 
 const RegisterForm = () => {
-  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
   const {
     register,
@@ -30,7 +28,7 @@ const RegisterForm = () => {
       const res = await singUp(data);
       if (res.data.status === "success") {
         localStorage.setItem("token", res.data.token);
-        navigate("/", { replace: true });
+        window.location.replace("/");
       }
     } catch (err) {
       if (err.status >= 400 && err.status < 500)

@@ -3,7 +3,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { login } from "../services/authServices";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   email: z.string().email("Invalid email"),
@@ -12,7 +11,6 @@ const schema = z.object({
 
 const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState(null);
-  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -23,10 +21,9 @@ const LoginForm = () => {
     try {
       setErrorMessage(null);
       const res = await login(data);
-      console.log(res);
       if (res.data.status === "success") {
         localStorage.setItem("token", res.data.token);
-        navigate("/", { replace: true });
+        window.location.replace("/");
       }
     } catch (err) {
       console.log(err);

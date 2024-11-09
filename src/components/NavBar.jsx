@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { UserContext } from "../pages/HomeLayout";
 
 const NavBar = () => {
+  const { currentUser } = useContext(UserContext);
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -18,12 +21,21 @@ const NavBar = () => {
             <NavLink to="rentals" className="nav-link">
               Rentals
             </NavLink>
-            <NavLink to="login" className="nav-link">
-              Login
-            </NavLink>
-            <NavLink to="register" className="nav-link">
-              Register
-            </NavLink>
+            {!currentUser && (
+              <>
+                <NavLink to="login" className="nav-link">
+                  Login
+                </NavLink>
+                <NavLink to="register" className="nav-link">
+                  Register
+                </NavLink>
+              </>
+            )}
+            {currentUser && (
+              <NavLink to="profile" className="nav-link">
+                {currentUser}
+              </NavLink>
+            )}
           </div>
         </div>
       </div>
