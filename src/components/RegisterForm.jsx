@@ -28,7 +28,6 @@ const RegisterForm = () => {
     try {
       setErrorMessage(null);
       const res = await singUp(data);
-      console.log(res.data.status);
       if (res.data.status === "success") {
         localStorage.setItem("token", res.data.token);
         navigate("/", { replace: true });
