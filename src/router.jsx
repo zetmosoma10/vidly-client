@@ -29,12 +29,12 @@ const router = createBrowserRouter([
         element: <Rentals />,
       },
       {
-        path: "movie/:id",
-        element: <MovieDetails />,
-      },
-      {
         element: <AuthRequired />,
         children: [
+          {
+            path: "movie/:id",
+            element: <MovieDetails />,
+          },
           {
             path: "movie/new",
             element: <SaveMoviePage />,

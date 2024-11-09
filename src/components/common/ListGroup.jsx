@@ -1,4 +1,8 @@
-const ListGroup = ({ genres, onSelectGenre, selectedGenre }) => {
+import { useContext } from "react";
+import { UserContext } from "../../pages/HomeLayout";
+
+const ListGroup = ({ onSelectGenre, selectedGenre }) => {
+  const { genres } = useContext(UserContext);
   return (
     <ul className="list-group">
       <li

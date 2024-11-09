@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { paginate } from "../utils/paginate";
 import Pagination from "./common/Pagination";
 import ListGroup from "./common/ListGroup";
@@ -6,7 +6,6 @@ import MoviesTable from "./MoviesTable";
 import _ from "lodash";
 import { getMovies, removeMovie } from "../services/moviesServices";
 import { toast } from "react-toastify";
-import { useOutletContext } from "react-router-dom";
 
 const Movie = () => {
   const [allMovies, setAllMovies] = useState([]);
@@ -15,7 +14,6 @@ const Movie = () => {
   const [selectedGenre, setSelectedGenre] = useState(null);
   const [sortColumn, setSortColumn] = useState({ path: "title", order: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
-  const allGenres = useOutletContext();
   const pageSize = 4;
 
   useEffect(() => {
@@ -93,7 +91,6 @@ const Movie = () => {
       <div className="col-2">
         <ListGroup
           selectedGenre={selectedGenre}
-          genres={allGenres}
           onSelectGenre={onSelectGenre}
         />
       </div>

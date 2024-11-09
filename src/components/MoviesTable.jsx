@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { displayMovieMessage } from "../utils/displayMovieMessage";
+import { useContext } from "react";
+import { UserContext } from "../pages/HomeLayout";
 
 const MoviesTable = ({
   paginatedMovies,
@@ -9,6 +11,8 @@ const MoviesTable = ({
   onSearchChange,
   searchQuery,
 }) => {
+  const { currentUser } = useContext(UserContext);
+
   return (
     <>
       <Link to="movie/new" className="btn btn-primary mb-3">
@@ -47,7 +51,7 @@ const MoviesTable = ({
             >
               Rate
             </th>
-            <th></th>
+            {currentUser && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -59,16 +63,18 @@ const MoviesTable = ({
               <td>{movie.genre.genre}</td>
               <td>{movie.numberInStock}</td>
               <td>{movie.dailyRentalRate}</td>
-              <td>
-                <button
-                  onClick={() => {
-                    deleteMovie(movie._id);
-                  }}
-                  className="btn btn-sm btn-danger"
-                >
-                  Delete
-                </button>
-              </td>
+              {currentUser && (
+                <td>
+                  <button
+                    onClick={() => {
+                      deleteMovie(movie._id);
+                    }}
+                    className="btn btn-sm btn-danger"
+                  >
+                    Delete
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
